@@ -1,5 +1,5 @@
 import Notifications from '@/components/notifications'
-import { prefetchListAuthenticatedUserNotifications } from '@/hooks/notifications'
+import { prefetchListAuthenticatedUserNotifications } from '@/hooks/endpoints/notifications'
 import { verifyAuth } from '@/lib/dal'
 import seo from '@/lib/seo'
 import { authHeader } from '@/lib/utils'

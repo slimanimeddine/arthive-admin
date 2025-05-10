@@ -19,7 +19,7 @@ export default async function middleware(req: NextRequest) {
   )
 
   const cookieStore = await cookies()
-  const cookie = cookieStore.get('session')?.value
+  const cookie = cookieStore.get('admin-session')?.value
   const session = await decrypt(cookie)
 
   if (isProtectedRoute && !session?.id && !session?.token) {

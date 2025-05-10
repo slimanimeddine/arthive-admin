@@ -3,7 +3,7 @@ import { useEcho } from '@/hooks/echo'
 import {
   useListAuthenticatedUserNotifications,
   useMarkAllNotificationsAsRead,
-} from '@/hooks/notifications'
+} from '@/hooks/endpoints/notifications'
 import { authHeader, matchQueryStatus, onError } from '@/lib/utils'
 import { NotificationData, NotificationType } from '@/types/models/notification'
 import { CheckIcon } from '@heroicons/react/20/solid'

@@ -1,5 +1,8 @@
 'use client'
-import { ChangePasswordBody, useChangePassword } from '@/hooks/authentication'
+import {
+  ChangePasswordBody,
+  useChangePassword,
+} from '@/hooks/endpoints/authentication'
 import { authHeader, classNames, onError } from '@/lib/utils'
 import { changePasswordBody } from '@/schemas/authentication'
 import { zodResolver } from '@hookform/resolvers/zod'

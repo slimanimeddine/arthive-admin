@@ -1,6 +1,6 @@
 'use client'
 
-import { useVerifyEmail } from '@/hooks/authentication'
+import { useVerifyEmail } from '@/hooks/endpoints/authentication'
 import { authHeader } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'

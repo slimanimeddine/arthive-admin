@@ -4,6 +4,9 @@ export default defineConfig({
   App: {
     input: {
       target: 'http://localhost:8000/docs.openapi',
+      filters: {
+        tags: ['Admin'],
+      },
     },
     output: {
       namingConvention: 'kebab-case',

@@ -1,6 +1,6 @@
 'use client'
 import { deleteSession } from '@/actions/session'
-import { DeleteUserBody, useDeleteUser } from '@/hooks/authentication'
+import { DeleteUserBody, useDeleteUser } from '@/hooks/endpoints/authentication'
 import { authHeader, onError } from '@/lib/utils'
 import { deleteUserBody } from '@/schemas/authentication'
 import { zodResolver } from '@hookform/resolvers/zod'

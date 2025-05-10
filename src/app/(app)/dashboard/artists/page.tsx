@@ -3,11 +3,10 @@ import seo from '@/lib/seo'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  ...seo('Welcome', 'Welcome to ArtHive Admin Dashboard.'),
+  ...seo('Artists', 'Manage artists.'),
 }
 
 export default async function Page() {
   await verifyAuth()
-
-  return <>welcome to dashboard</>
+  return <>artists</>
 }

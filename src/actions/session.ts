@@ -4,7 +4,7 @@ import { decrypt, encrypt } from '@/lib/encryption'
 import { cookies } from 'next/headers'
 
 export async function getSession() {
-  const cookie = (await cookies()).get('session')?.value
+  const cookie = (await cookies()).get('admin-session')?.value
   const session = await decrypt(cookie)
 
   if (!session) {
@@ -19,7 +19,7 @@ export async function createSession(id: string, token: string) {
   const session = await encrypt({ id, token })
   const cookieStore = await cookies()
 
-  cookieStore.set('session', session, {
+  cookieStore.set('admin-session', session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
@@ -29,7 +29,7 @@ export async function createSession(id: string, token: string) {
 }
 
 export async function updateSession() {
-  const session = (await cookies()).get('session')?.value
+  const session = (await cookies()).get('admin-session')?.value
   const payload = await decrypt(session)
 
   if (!session || !payload) {
@@ -39,7 +39,7 @@ export async function updateSession() {
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
   const cookieStore = await cookies()
-  cookieStore.set('session', session, {
+  cookieStore.set('admin-session', session, {
     httpOnly: true,
     secure: true,
     expires: expires,
@@ -50,5 +50,5 @@ export async function updateSession() {
 
 export async function deleteSession() {
   const cookieStore = await cookies()
-  cookieStore.delete('session')
+  cookieStore.delete('admin-session')
 }

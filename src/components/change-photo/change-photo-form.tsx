@@ -1,5 +1,5 @@
 'use client'
-import { useUpdateAuthenticatedUser } from '@/hooks/users'
+import { useUpdateAuthenticatedUser } from '@/hooks/endpoints/users'
 import { MAX_FILE_SIZE } from '@/lib/constants'
 import {
   authHeader,

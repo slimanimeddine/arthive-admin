@@ -6,7 +6,7 @@ import {
   useCheckIfAuthenticatedUserIsFollowing,
   useFollowUser,
   useUnfollowUser,
-} from './follows'
+} from './endpoints/follows'
 
 export function useFollowUserAction(token: string | undefined, userId: string) {
   const router = useRouter()

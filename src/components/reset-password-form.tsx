@@ -1,5 +1,8 @@
 'use client'
-import { ResetPasswordBody, useResetPassword } from '@/hooks/authentication'
+import {
+  ResetPasswordBody,
+  useResetPassword,
+} from '@/hooks/endpoints/authentication'
 import { onError } from '@/lib/utils'
 import { resetPasswordBody } from '@/schemas/authentication'
 import { zodResolver } from '@hookform/resolvers/zod'
