@@ -1,4 +1,4 @@
-import ArtworksTable from '@/components/artworks-table/artworks-table'
+import ArtworksTable from '@/components/artworks-table'
 import {
   ListArtworksParams,
   prefetchListArtworksQuery,
@@ -6,7 +6,11 @@ import {
 import { verifyAuth } from '@/lib/dal'
 import seo from '@/lib/seo'
 import { authHeader } from '@/lib/utils'
-import { QueryClient } from '@tanstack/react-query'
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -42,5 +46,10 @@ export default async function Page({
   }
 
   await prefetchListArtworksQuery(queryClient, queryParams, authHeader(token))
-  return <ArtworksTable token={token} />
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ArtworksTable token={token} />
+    </HydrationBoundary>
+  )
 }

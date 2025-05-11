@@ -2,10 +2,11 @@
 import { useListArtworks } from '@/hooks/endpoints/admin'
 import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
 import Image from 'next/image'
-import ErrorUI from '../error-ui'
-import Pagination from '../pagination'
+import ErrorUI from './error-ui'
+import Pagination from './pagination'
 import { useSearchParams } from 'next/navigation'
-import ArtworksTableSkeleton from './artworks-table-skeleton'
+import Link from 'next/link'
+import TableSkeleton from './ui-skeletons/table-skeleton'
 
 export default function ArtworksTable({ token }: { token: string }) {
   const searchParams = useSearchParams()
@@ -42,7 +43,7 @@ export default function ArtworksTable({ token }: { token: string }) {
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           {matchQueryStatus(listArtworksQuery, {
-            Loading: <ArtworksTableSkeleton />,
+            Loading: <TableSkeleton />,
             Errored: <ErrorUI />,
             Empty: <></>,
             Success: ({ data }) => {
@@ -137,9 +138,13 @@ export default function ArtworksTable({ token }: { token: string }) {
                             {item.comments}
                           </td>
                           <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <button className="text-indigo-600 hover:text-indigo-900">
+                            <Link
+                              prefetch={true}
+                              href={`/dashboard/artworks/${item.id}`}
+                              className="text-indigo-600 hover:text-indigo-900"
+                            >
                               Details
-                            </button>
+                            </Link>
                           </td>
                         </tr>
                       ))}

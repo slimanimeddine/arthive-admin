@@ -1,33 +1,36 @@
-// import ArtworkPost from '@/components/artwork-post/post'
-// import {
-//   prefetchShowPublishedArtwork,
-//   showPublishedArtwork,
-// } from '@/hooks/artworks'
-// import { getAuth } from '@/lib/dal'
-// import seo from '@/lib/seo'
-// import { QueryClient } from '@tanstack/react-query'
-// import { Metadata } from 'next'
+import ArtworkDetails from '@/components/artwork-details'
+import { prefetchShowArtworkQuery } from '@/hooks/endpoints/admin'
+import { verifyAuth } from '@/lib/dal'
+import seo from '@/lib/seo'
+import { authHeader } from '@/lib/utils'
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query'
+import { Metadata } from 'next'
 
-type Props = {
-  params: Promise<{ id: string }>
+export const metadata: Metadata = {
+  ...seo('Artwork', 'Manage artwork.'),
 }
 
-// export async function generateMetadata({ params }: Props): Promise<Metadata> {
-//   const { id } = await params
-
-//   const artwork = await showPublishedArtwork(id)
-
-//   return {
-//     ...seo(artwork.data.title, artwork.data.description),
-//   }
-// }
-
-export default async function Page({ params }: Props) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
   const id = (await params).id
-  // const { token } = await getAuth()
-  // const queryClient = new QueryClient()
+  const { token } = await verifyAuth()
+  const queryClient = new QueryClient()
 
-  // await prefetchShowPublishedArtwork(queryClient, id)
+  await prefetchShowArtworkQuery(queryClient, id, authHeader(token))
 
-  return <>artwork: ${id}</>
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ArtworkDetails
+        id={id}
+        token={token}
+      />
+    </HydrationBoundary>
+  )
 }
