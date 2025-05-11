@@ -138,7 +138,7 @@ export default function ArtistsTable({ token }: { token: string }) {
                               ${
                                 artist.verified === 'Yes'
                                   ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-                                  : 'bg-yellow-50 text-red-800 ring-1 ring-inset ring-red-600/20'
+                                  : 'bg-red-50 text-red-800 ring-1 ring-inset ring-red-600/20'
                               }`}
                             >
                               {artist.verified}
