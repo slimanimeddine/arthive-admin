@@ -80,6 +80,12 @@ export type ReviewArtistVerificationRequestBody = z.infer<
   typeof reviewArtistVerificationRequestBody
 >
 
+export type ShowArtistVerificationRequest200 =
+  ApiResource<ArtistVerificationRequestModel>
+export type ShowArtistVerificationRequest401 = UnauthenticatedApiResponse
+export type ShowArtistVerificationRequest403 = UnauthorizedApiResponse
+export type ShowArtistVerificationRequest404 = NotFoundApiResponse
+
 import { customInstance } from '@/lib/axios'
 import type { BodyType, ErrorType } from '@/lib/axios'
 import {
@@ -1124,4 +1130,248 @@ export const useReviewArtistVerificationRequest = <
     getReviewArtistVerificationRequestMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Retrieve a specific artist verification request by its ID.
+ * @summary Show Artist Verification Request
+ */
+export const showArtistVerificationRequest = (
+  artistVerificationRequestId: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<ShowArtistVerificationRequest200>(
+    {
+      url: `/api/v1/admin/artist-verification-requests/${artistVerificationRequestId}`,
+      method: 'GET',
+      signal,
+    },
+    options
+  )
+}
+
+export const getShowArtistVerificationRequestQueryKey = (
+  artistVerificationRequestId: string
+) => {
+  return [
+    `/api/v1/admin/artist-verification-requests/${artistVerificationRequestId}`,
+  ] as const
+}
+
+export const getShowArtistVerificationRequestQueryOptions = <
+  TData = Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+  TError = ErrorType<
+    | ShowArtistVerificationRequest401
+    | ShowArtistVerificationRequest403
+    | ShowArtistVerificationRequest404
+  >,
+>(
+  artistVerificationRequestId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getShowArtistVerificationRequestQueryKey(artistVerificationRequestId)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof showArtistVerificationRequest>>
+  > = ({ signal }) =>
+    showArtistVerificationRequest(
+      artistVerificationRequestId,
+      requestOptions,
+      signal
+    )
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!artistVerificationRequestId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ShowArtistVerificationRequestQueryResult = NonNullable<
+  Awaited<ReturnType<typeof showArtistVerificationRequest>>
+>
+export type ShowArtistVerificationRequestQueryError = ErrorType<
+  | ShowArtistVerificationRequest401
+  | ShowArtistVerificationRequest403
+  | ShowArtistVerificationRequest404
+>
+
+export function useShowArtistVerificationRequest<
+  TData = Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+  TError = ErrorType<
+    | ShowArtistVerificationRequest401
+    | ShowArtistVerificationRequest403
+    | ShowArtistVerificationRequest404
+  >,
+>(
+  artistVerificationRequestId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+          TError,
+          Awaited<ReturnType<typeof showArtistVerificationRequest>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useShowArtistVerificationRequest<
+  TData = Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+  TError = ErrorType<
+    | ShowArtistVerificationRequest401
+    | ShowArtistVerificationRequest403
+    | ShowArtistVerificationRequest404
+  >,
+>(
+  artistVerificationRequestId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+          TError,
+          Awaited<ReturnType<typeof showArtistVerificationRequest>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useShowArtistVerificationRequest<
+  TData = Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+  TError = ErrorType<
+    | ShowArtistVerificationRequest401
+    | ShowArtistVerificationRequest403
+    | ShowArtistVerificationRequest404
+  >,
+>(
+  artistVerificationRequestId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Show Artist Verification Request
+ */
+
+export function useShowArtistVerificationRequest<
+  TData = Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+  TError = ErrorType<
+    | ShowArtistVerificationRequest401
+    | ShowArtistVerificationRequest403
+    | ShowArtistVerificationRequest404
+  >,
+>(
+  artistVerificationRequestId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getShowArtistVerificationRequestQueryOptions(
+    artistVerificationRequestId,
+    options
+  )
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  query.queryKey = queryOptions.queryKey
+
+  return query
+}
+
+/**
+ * @summary Show Artist Verification Request
+ */
+export const prefetchShowArtistVerificationRequestQuery = async <
+  TData = Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+  TError = ErrorType<
+    | ShowArtistVerificationRequest401
+    | ShowArtistVerificationRequest403
+    | ShowArtistVerificationRequest404
+  >,
+>(
+  queryClient: QueryClient,
+  artistVerificationRequestId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof showArtistVerificationRequest>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  }
+): Promise<QueryClient> => {
+  const queryOptions = getShowArtistVerificationRequestQueryOptions(
+    artistVerificationRequestId,
+    options
+  )
+
+  await queryClient.prefetchQuery(queryOptions)
+
+  return queryClient
 }
