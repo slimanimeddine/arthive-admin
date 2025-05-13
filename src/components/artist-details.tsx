@@ -153,7 +153,7 @@ export default function ArtistDetails({ id, token }: ArtistDetailsProps) {
                         router.push(`/dashboard/artworks/${artwork.id}`)
                       }
                       key={artwork.id}
-                      className="group relative"
+                      className="group relative hover:underline"
                     >
                       <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                         <Image
