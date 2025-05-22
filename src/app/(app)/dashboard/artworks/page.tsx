@@ -34,7 +34,7 @@ export default async function Page({
   const { token } = await verifyAuth()
   const queryClient = new QueryClient()
 
-  const { tag, status, artworkSort, page, searchQuery } = await searchParams
+  const { tag, status, artworkSort, page } = await searchParams
 
   const queryParams: Record<string, SearchParamsValue> = {
     perPage: '10',
@@ -42,7 +42,6 @@ export default async function Page({
     ...(status && { 'filter[status]': status }),
     ...(artworkSort && { sort: artworkSort }),
     ...(page && { page }),
-    ...(searchQuery && { searchQuery }),
   }
 
   await prefetchListArtworksQuery(queryClient, queryParams, authHeader(token))
