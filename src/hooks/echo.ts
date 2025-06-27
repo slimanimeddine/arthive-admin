@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Echo from 'laravel-echo'
+import Echo, { Broadcaster } from 'laravel-echo'
 import { useEffect, useState } from 'react'
 
 import { AXIOS_INSTANCE } from '@/lib/axios'
@@ -15,7 +15,7 @@ interface AuthorizationOptions {
 }
 
 export function useEcho(token: string) {
-  const [echoInstance, setEchoInstance] = useState<Echo<'reverb'>>()
+  const [echoInstance, setEchoInstance] = useState<Echo<keyof Broadcaster>>()
 
   useEffect(() => {
     if (!token) {
@@ -26,10 +26,7 @@ export function useEcho(token: string) {
       Pusher,
       encrypted: true,
       key: process.env.NEXT_PUBLIC_REVERB_APP_KEY,
-      authorizer: (
-        channel: { name: string },
-        options: AuthorizationOptions
-      ): Authorizer => {
+      authorizer: (channel: { name: string }): Authorizer => {
         return {
           authorize: (socketId: string, callback: CallableFunction) => {
             AXIOS_INSTANCE.post(
@@ -56,8 +53,8 @@ export function useEcho(token: string) {
         }
       },
       wsHost: process.env.NEXT_PUBLIC_REVERB_HOST,
-      wsPort: process.env.NEXT_PUBLIC_REVERB_PORT,
-      wssPort: process.env.NEXT_PUBLIC_REVERB_PORT,
+      wsPort: Number(process.env.NEXT_PUBLIC_REVERB_PORT) ?? 8080,
+      wssPort: Number(process.env.NEXT_PUBLIC_REVERB_PORT) ?? 8080,
       forceTLS: (process.env.NEXT_PUBLIC_REVERB_SCHEME ?? 'https') === 'https',
       enabledTransports: ['ws', 'wss'],
     })
