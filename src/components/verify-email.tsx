@@ -1,58 +1,63 @@
-'use client'
+"use client";
 
-import { useVerifyEmail } from '@/hooks/endpoints/authentication'
-import { authHeader } from '@/lib/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
-import LoadingSpinner from './loading-spinner'
-import { useEffect } from 'react'
-import Navigate from './navigate'
-import { isAxiosError } from 'axios'
+import { authHeader } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { isAxiosError } from "axios";
+import LoadingUI from "./loading-ui";
+import { useSession } from "@/hooks/session";
+import { useVerifyEmail } from "@/hooks/endpoints/authentication";
+import { useParams } from "next/navigation";
 
 type VerifyEmailProps = {
-  token: string
-  slug: string[]
-}
+  expires: string;
+  signature: string;
+};
 
-export default function VerifyEmail({ token, slug }: VerifyEmailProps) {
-  const id = slug[0]
-  const hash = slug[1]
-  const queryClient = useQueryClient()
+export default function VerifyEmail({ expires, signature }: VerifyEmailProps) {
+  const [message, setMessage] = useState("");
+  const { token } = useSession();
 
-  const authConfig = authHeader(token)
-
-  const { isPending, isError, isSuccess, error } = useVerifyEmail(
+  const queryClient = useQueryClient();
+  const { id, hash } = useParams<{ id: string; hash: string }>();
+  const { isLoading, isError, isSuccess, error } = useVerifyEmail(
     id,
     hash,
-    authConfig
-  )
+    {
+      expires,
+      signature,
+    },
+    authHeader(token),
+  );
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success('Email verified successfully')
-      queryClient.invalidateQueries({
-        queryKey: ['/api/v1/users/me'],
-      })
+      toast.success("Email verified successfully");
+      setMessage("Email verified successfully");
+      void queryClient.invalidateQueries({
+        queryKey: ["/api/v1/users/me"],
+      });
     }
-  }, [isSuccess, queryClient])
+  }, [isSuccess, queryClient]);
 
-  if (isPending) {
+  useEffect(() => {
+    if (isError) {
+      if (isAxiosError(error) && error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An error occurred while verifying your email");
+      }
+    }
+  }, [error, isError]);
+
+  if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <LoadingSpinner />
+        <LoadingUI />
       </div>
-    )
+    );
   }
 
-  if (isError) {
-    if (
-      isAxiosError(error) &&
-      error.response?.status === 403 &&
-      error.response.data.message === 'Email already verified'
-    ) {
-      return <Navigate to="/edit-profile" />
-    }
-  }
-
-  return <Navigate to="/edit-profile" />
+  return <>{message}</>;
 }

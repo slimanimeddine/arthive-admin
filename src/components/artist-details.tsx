@@ -1,21 +1,19 @@
-'use client'
-import { useShowArtist } from '@/hooks/endpoints/admin'
-import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
-import DetailsSkeleton from './ui-skeletons/details-skeleton'
-import ErrorUI from './error-ui'
-import Image from 'next/image'
-import AvatarPlaceholder from './avatar-placeholder'
-import { useRouter } from 'next/navigation'
+"use client";
+import { useShowArtist } from "@/hooks/endpoints/admin";
+import { authHeader, fileUrl, matchQueryStatus } from "@/lib/utils";
+import DetailsSkeleton from "./ui-skeletons/details-skeleton";
+import ErrorUI from "./error-ui";
+import Image from "next/image";
+import AvatarPlaceholder from "./avatar-placeholder";
+import { useParams, useRouter } from "next/navigation";
+import { useSession } from "@/hooks/session";
 
-type ArtistDetailsProps = {
-  id: string
-  token: string
-}
+export default function ArtistDetails() {
+  const { token } = useSession();
+  const { id } = useParams<{ id: string }>();
+  const showArtistQuery = useShowArtist(id, authHeader(token));
 
-export default function ArtistDetails({ id, token }: ArtistDetailsProps) {
-  const showArtistQuery = useShowArtist(id, authHeader(token))
-
-  const router = useRouter()
+  const router = useRouter();
 
   return matchQueryStatus(showArtistQuery, {
     Loading: <DetailsSkeleton />,
@@ -30,7 +28,7 @@ export default function ArtistDetails({ id, token }: ArtistDetailsProps) {
         email: data.data.email,
         bio: data.data.bio,
         country: data.data.country,
-        verified: data.data.artist_verified_at ? 'Yes' : 'No',
+        verified: data.data.artist_verified_at ? "Yes" : "No",
         photo: fileUrl(data.data.photo),
         artworks: data.data.artworks.map((artwork) => ({
           id: artwork.id,
@@ -39,7 +37,7 @@ export default function ArtistDetails({ id, token }: ArtistDetailsProps) {
           commentsCount: artwork.artwork_comments_count,
           mainPhoto: fileUrl(artwork.artwork_main_photo_path)!,
         })),
-      }
+      };
       return (
         <div>
           <div className="px-4 sm:px-0">
@@ -123,12 +121,11 @@ export default function ArtistDetails({ id, token }: ArtistDetailsProps) {
                 </dt>
                 <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <span
-                    className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium 
-                              ${
-                                artist.verified === 'Yes'
-                                  ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-                                  : 'bg-red-50 text-red-800 ring-1 ring-inset ring-red-600/20'
-                              }`}
+                    className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
+                      artist.verified === "Yes"
+                        ? "bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset"
+                        : "bg-red-50 text-red-800 ring-1 ring-red-600/20 ring-inset"
+                    }`}
                   >
                     {artist.verified}
                   </span>
@@ -155,7 +152,7 @@ export default function ArtistDetails({ id, token }: ArtistDetailsProps) {
                       key={artwork.id}
                       className="group relative hover:underline"
                     >
-                      <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                      <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80">
                         <Image
                           src={artwork.mainPhoto}
                           alt={artwork.title}
@@ -190,7 +187,7 @@ export default function ArtistDetails({ id, token }: ArtistDetailsProps) {
             )}
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

@@ -1,37 +1,40 @@
-'use client'
-import { useListUsers } from '@/hooks/endpoints/admin'
-import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
-import Image from 'next/image'
-import ErrorUI from '../error-ui'
-import Pagination from '../pagination'
-import { useSearchParams } from 'next/navigation'
-import TableSkeleton from '../ui-skeletons/table-skeleton'
-import AvatarPlaceholder from '../avatar-placeholder'
-import Link from 'next/link'
-import SortFilterArtists from './sort-filter-artists'
+"use client";
+import { useListUsers } from "@/hooks/endpoints/admin";
+import { authHeader, fileUrl, matchQueryStatus } from "@/lib/utils";
+import Image from "next/image";
+import ErrorUI from "../error-ui";
+import Pagination from "../pagination";
+import TableSkeleton from "../ui-skeletons/table-skeleton";
+import AvatarPlaceholder from "../avatar-placeholder";
+import Link from "next/link";
+import SortFilterArtists from "./sort-filter-artists";
+import { useArtistSort } from "@/hooks/params/artist-sort";
+import { usePage } from "@/hooks/params/page";
+import { useTag } from "@/hooks/params/tag";
+import { useVerified } from "@/hooks/params/verified";
+import { useSession } from "@/hooks/session";
 
-export default function ArtistsTable({ token }: { token: string }) {
-  const searchParams = useSearchParams()
+export default function ArtistsTable() {
+  const { token } = useSession();
+  const { page } = usePage();
+  const { artistSort } = useArtistSort();
+  const { tag } = useTag();
+  const { verified } = useVerified();
 
-  const page = searchParams.get('page')
-  const artistSort = searchParams.get('artistSort')
-  const tag = searchParams.get('tag')
-  const verified = searchParams.get('verified')
-
-  const queryParams: Record<string, string> = {
-    perPage: '10',
-    ...(tag && { 'filter[tag]': tag }),
-    ...(verified && { 'filter[verified]': verified }),
+  const queryParams: Record<string, string | number | boolean> = {
+    perPage: 10,
+    ...(tag && { "filter[tag]": tag }),
+    ...(verified && { "filter[verified]": verified }),
     ...(artistSort && { sort: artistSort }),
     ...(page && { page }),
-  }
+  };
 
-  const listUsersQuery = useListUsers(queryParams, authHeader(token))
+  const listUsersQuery = useListUsers(queryParams, authHeader(token));
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex-auto">
-        <h1 className="text-base font-semibold leading-6 text-gray-900">
+        <h1 className="text-base leading-6 font-semibold text-gray-900">
           Users
         </h1>
         <p className="mt-2 text-sm text-gray-700">
@@ -51,12 +54,12 @@ export default function ArtistsTable({ token }: { token: string }) {
                 email: artist.email,
                 username: artist.username,
                 country: artist.country,
-                verified: artist.artist_verified_at ? 'Yes' : 'No',
+                verified: artist.artist_verified_at ? "Yes" : "No",
                 photo: fileUrl(artist.photo),
-              }))
+              }));
 
-              const meta = data.meta
-              const links = data.links
+              const meta = data.meta;
+              const links = data.links;
               return (
                 <>
                   <SortFilterArtists />
@@ -66,7 +69,7 @@ export default function ArtistsTable({ token }: { token: string }) {
                         <tr>
                           <th
                             scope="col"
-                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                           >
                             Name
                           </th>
@@ -90,7 +93,7 @@ export default function ArtistsTable({ token }: { token: string }) {
                           </th>
                           <th
                             scope="col"
-                            className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                            className="relative py-3.5 pr-4 pl-3 sm:pr-0"
                           >
                             <span className="sr-only">Edit</span>
                           </th>
@@ -99,7 +102,7 @@ export default function ArtistsTable({ token }: { token: string }) {
                       <tbody className="divide-y divide-gray-200 bg-white">
                         {artists.map((artist) => (
                           <tr key={artist.id}>
-                            <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                            <td className="py-5 pr-3 pl-4 text-sm whitespace-nowrap sm:pl-0">
                               <div className="flex items-center">
                                 <div className="h-11 w-11 flex-shrink-0">
                                   {artist.photo ? (
@@ -124,28 +127,27 @@ export default function ArtistsTable({ token }: { token: string }) {
                                 </div>
                               </div>
                             </td>
-                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
                               <div className="text-gray-900">
                                 {artist.username}
                               </div>
                             </td>
-                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
                               {artist.country}
                             </td>
 
-                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
                               <span
-                                className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium 
-                              ${
-                                artist.verified === 'Yes'
-                                  ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-                                  : 'bg-red-50 text-red-800 ring-1 ring-inset ring-red-600/20'
-                              }`}
+                                className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
+                                  artist.verified === "Yes"
+                                    ? "bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset"
+                                    : "bg-red-50 text-red-800 ring-1 ring-red-600/20 ring-inset"
+                                }`}
                               >
                                 {artist.verified}
                               </span>
                             </td>
-                            <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <td className="relative py-5 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                               <Link
                                 href={`/dashboard/artists/${artist.id}`}
                                 className="text-indigo-600 hover:text-indigo-900"
@@ -162,19 +164,16 @@ export default function ArtistsTable({ token }: { token: string }) {
                     </table>
                     {meta.total > 10 && (
                       <div className="mt-2">
-                        <Pagination
-                          meta={meta}
-                          links={links}
-                        />
+                        <Pagination meta={meta} links={links} />
                       </div>
                     )}
                   </div>
                 </>
-              )
+              );
             },
           })}
         </div>
       </div>
     </div>
-  )
+  );
 }

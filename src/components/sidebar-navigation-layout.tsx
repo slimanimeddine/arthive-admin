@@ -1,29 +1,33 @@
-'use client'
+"use client";
 
-import { classNames } from '@/lib/utils'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { ForwardRefExoticComponent, SVGProps, RefAttributes } from 'react'
+import { classNames } from "@/lib/utils";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  type ForwardRefExoticComponent,
+  type SVGProps,
+  type RefAttributes,
+} from "react";
 
 type SidebarNavigationLayoutProps = Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
   navigation: {
-    name: string
-    href: string
+    name: string;
+    href: string;
     icon: ForwardRefExoticComponent<
-      Omit<SVGProps<SVGSVGElement>, 'ref'> & {
-        title?: string
-        titleId?: string
+      Omit<SVGProps<SVGSVGElement>, "ref"> & {
+        title?: string;
+        titleId?: string;
       } & RefAttributes<SVGSVGElement>
-    >
-  }[]
-}>
+    >;
+  }[];
+}>;
 
 export default function SidebarNavigationLayout({
   children,
   navigation,
 }: SidebarNavigationLayoutProps) {
-  const pathname = usePathname()
+  const pathname = usePathname();
   return (
     <div className="mx-auto max-w-7xl lg:flex lg:gap-x-4">
       <h1 className="sr-only">General Settings</h1>
@@ -37,18 +41,18 @@ export default function SidebarNavigationLayout({
                   href={item.href}
                   className={classNames(
                     item.href === pathname
-                      ? 'bg-gray-50 text-indigo-600'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
-                    'group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm font-semibold leading-6'
+                      ? "bg-gray-50 text-indigo-600"
+                      : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
+                    "group flex gap-x-3 rounded-md py-2 pr-3 pl-2 text-sm leading-6 font-semibold",
                   )}
                 >
                   <item.icon
                     aria-hidden="true"
                     className={classNames(
                       item.href === pathname
-                        ? 'text-indigo-600'
-                        : 'text-gray-400 group-hover:text-indigo-600',
-                      'h-6 w-6 shrink-0'
+                        ? "text-indigo-600"
+                        : "text-gray-400 group-hover:text-indigo-600",
+                      "h-6 w-6 shrink-0",
                     )}
                   />
                   {item.name}
@@ -65,5 +69,5 @@ export default function SidebarNavigationLayout({
         </div>
       </main>
     </div>
-  )
+  );
 }

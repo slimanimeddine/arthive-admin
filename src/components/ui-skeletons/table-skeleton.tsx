@@ -1,27 +1,27 @@
-'use client'
+"use client";
 function TableRow() {
   return (
     <tr>
-      <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500 animate-pulse">
-        <span className="inline-flex items-center rounded-md h-4 bg-gray-200 w-16"></span>
+      <td className="animate-pulse px-1 py-4 text-sm whitespace-nowrap text-gray-500">
+        <span className="inline-flex h-4 w-16 items-center rounded-md bg-gray-200"></span>
       </td>
-      <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500 animate-pulse">
-        <span className="inline-flex items-center rounded-md h-4 bg-gray-200 w-16"></span>
+      <td className="animate-pulse px-1 py-4 text-sm whitespace-nowrap text-gray-500">
+        <span className="inline-flex h-4 w-16 items-center rounded-md bg-gray-200"></span>
       </td>
-      <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500 animate-pulse">
-        <span className="inline-flex items-center rounded-md h-4 bg-gray-200 w-16"></span>
+      <td className="animate-pulse px-1 py-4 text-sm whitespace-nowrap text-gray-500">
+        <span className="inline-flex h-4 w-16 items-center rounded-md bg-gray-200"></span>
       </td>
-      <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500 animate-pulse">
-        <span className="inline-flex items-center rounded-md h-4 bg-gray-200 w-16"></span>
+      <td className="animate-pulse px-1 py-4 text-sm whitespace-nowrap text-gray-500">
+        <span className="inline-flex h-4 w-16 items-center rounded-md bg-gray-200"></span>
       </td>
-      <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500 animate-pulse">
-        <span className="inline-flex items-center rounded-md h-4 bg-gray-200 w-16"></span>
+      <td className="animate-pulse px-1 py-4 text-sm whitespace-nowrap text-gray-500">
+        <span className="inline-flex h-4 w-16 items-center rounded-md bg-gray-200"></span>
       </td>
-      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0 animate-pulse">
-        <span className="inline-flex items-center rounded-md h-4 bg-gray-200 w-16"></span>
+      <td className="relative animate-pulse py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+        <span className="inline-flex h-4 w-16 items-center rounded-md bg-gray-200"></span>
       </td>
     </tr>
-  )
+  );
 }
 
 export default function TableSkeleton() {
@@ -60,10 +60,7 @@ export default function TableSkeleton() {
             >
               Comments
             </th>
-            <th
-              scope="col"
-              className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-            >
+            <th scope="col" className="relative py-3.5 pr-4 pl-3 sm:pr-0">
               <span className="sr-only">Actions</span>
             </th>
           </tr>
@@ -76,5 +73,5 @@ export default function TableSkeleton() {
         </tbody>
       </table>
     </div>
-  )
+  );
 }

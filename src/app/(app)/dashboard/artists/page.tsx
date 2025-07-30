@@ -1,50 +1,66 @@
-import ArtistsTable from '@/components/artists-table'
+import ArtistsTable from "@/components/artists-table";
+import { prefetchListUsersQuery } from "@/hooks/endpoints/admin";
 import {
-  ListUsersParams,
-  prefetchListUsersQuery,
-} from '@/hooks/endpoints/admin'
-import { verifyAuth } from '@/lib/dal'
-import seo from '@/lib/seo'
-import { authHeader } from '@/lib/utils'
+  ARTIST_SORT_VALUES,
+  ARTWORK_STATUS_VALUES,
+  TAGS,
+} from "@/lib/constants";
+import { verifyAuth } from "@/lib/dal";
+import seo from "@/lib/seo";
+import { authHeader, parseData } from "@/lib/utils";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
-} from '@tanstack/react-query'
-import { Metadata } from 'next'
+} from "@tanstack/react-query";
+import { type Metadata } from "next";
+import z from "zod";
 
 export const metadata: Metadata = {
-  ...seo('Artists', 'Manage artists.'),
-}
+  ...seo("Artists", "Manage artists."),
+};
 
-type SearchParamsValue = string | boolean | ListUsersParams['sort'] | undefined
-
-export default async function Page({
-  searchParams,
-}: {
+type Props = {
   searchParams: Promise<{
-    [key: string]: SearchParamsValue
-  }>
-}) {
-  const { token } = await verifyAuth()
-  const queryClient = new QueryClient()
+    tag?: string;
+    status?: string;
+    verified?: boolean;
+    artistSort?: string;
+    page: string;
+  }>;
+};
 
-  const { tag, status, verified, artistSort, page } = await searchParams
+const searchParamsSchema = z.object({
+  tag: z.enum(TAGS).optional(),
+  status: z.enum(ARTWORK_STATUS_VALUES).optional(),
+  verified: z.boolean().optional(),
+  artistSort: z.enum(ARTIST_SORT_VALUES).optional(),
+  page: z.int().default(1),
+});
 
-  const queryParams: Record<string, SearchParamsValue> = {
-    perPage: '10',
-    ...(tag && { 'filter[tag]': tag }),
-    ...(status && { 'filter[status]': status }),
-    ...(verified && { 'filter[verified]': verified }),
+export default async function Page({ searchParams }: Props) {
+  const { token } = await verifyAuth();
+  const queryClient = new QueryClient();
+
+  const { tag, status, verified, artistSort, page } = parseData(
+    await searchParams,
+    searchParamsSchema,
+  );
+
+  const queryParams: Record<string, number | string | boolean> = {
+    perPage: 10,
+    ...(tag && { "filter[tag]": tag }),
+    ...(status && { "filter[status]": status }),
+    ...(verified && { "filter[verified]": verified }),
     ...(artistSort && { sort: artistSort }),
     ...(page && { page }),
-  }
+  };
 
-  await prefetchListUsersQuery(queryClient, queryParams, authHeader(token))
+  await prefetchListUsersQuery(queryClient, queryParams, authHeader(token));
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ArtistsTable token={token} />
+      <ArtistsTable />
     </HydrationBoundary>
-  )
+  );
 }

@@ -1,58 +1,57 @@
-import ArtistVerificationRequestsTable from '@/components/artist-verification-requests-table'
-import {
-  ListArtistVerificationRequestsParams,
-  prefetchListArtistVerificationRequests,
-} from '@/hooks/endpoints/admin'
-import { verifyAuth } from '@/lib/dal'
-import seo from '@/lib/seo'
-import { authHeader } from '@/lib/utils'
+import ArtistVerificationRequestsTable from "@/components/artist-verification-requests-table";
+import { prefetchListArtistVerificationRequests } from "@/hooks/endpoints/admin";
+import { ARTWORK_STATUS_VALUES } from "@/lib/constants";
+import { verifyAuth } from "@/lib/dal";
+import seo from "@/lib/seo";
+import { authHeader, parseData } from "@/lib/utils";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
-} from '@tanstack/react-query'
-import { Metadata } from 'next'
+} from "@tanstack/react-query";
+import { type Metadata } from "next";
+import z from "zod";
 
 export const metadata: Metadata = {
   ...seo(
-    'Artist verification requests',
-    'Manage artist verification requests.'
+    "Artist verification requests",
+    "Manage artist verification requests.",
   ),
-}
+};
 
-type SearchParamsValue =
-  | string
-  | number
-  | ListArtistVerificationRequestsParams['filter[status]']
-  | undefined
-
-export default async function Page({
-  searchParams,
-}: {
+type Props = {
   searchParams: Promise<{
-    [key: string]: SearchParamsValue
-  }>
-}) {
-  const { token } = await verifyAuth()
-  const queryClient = new QueryClient()
+    status?: string;
+    page: number;
+  }>;
+};
 
-  const { status, page } = await searchParams
+const searchParamsSchema = z.object({
+  status: z.enum(ARTWORK_STATUS_VALUES).optional(),
+  page: z.int().default(1),
+});
 
-  const queryParams: Record<string, SearchParamsValue> = {
-    perPage: '10',
-    ...(status && { 'filter[status]': status }),
+export default async function Page({ searchParams }: Props) {
+  const { token } = await verifyAuth();
+  const queryClient = new QueryClient();
+
+  const { status, page } = parseData(await searchParams, searchParamsSchema);
+
+  const queryParams: Record<string, number | string> = {
+    perPage: 10,
+    ...(status && { "filter[status]": status }),
     ...(page && { page }),
-  }
+  };
 
   await prefetchListArtistVerificationRequests(
     queryClient,
     queryParams,
-    authHeader(token)
-  )
+    authHeader(token),
+  );
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ArtistVerificationRequestsTable token={token} />
+      <ArtistVerificationRequestsTable />
     </HydrationBoundary>
-  )
+  );
 }

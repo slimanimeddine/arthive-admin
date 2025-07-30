@@ -1,19 +1,18 @@
-'use client'
+"use client";
 
-import { useShowArtwork } from '@/hooks/endpoints/admin'
-import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
-import ErrorUI from './error-ui'
-import Link from 'next/link'
-import Image from 'next/image'
-import DetailsSkeleton from './ui-skeletons/details-skeleton'
+import { useShowArtwork } from "@/hooks/endpoints/admin";
+import { authHeader, fileUrl, matchQueryStatus } from "@/lib/utils";
+import ErrorUI from "./error-ui";
+import Link from "next/link";
+import Image from "next/image";
+import DetailsSkeleton from "./ui-skeletons/details-skeleton";
+import { useSession } from "@/hooks/session";
+import { useParams } from "next/navigation";
 
-type ArtworkDetailsProps = {
-  id: string
-  token: string
-}
-
-export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
-  const showArtworkQuery = useShowArtwork(id, authHeader(token))
+export default function ArtworkDetails() {
+  const { token } = useSession();
+  const { id } = useParams<{ id: string }>();
+  const showArtworkQuery = useShowArtwork(id, authHeader(token));
   return matchQueryStatus(showArtworkQuery, {
     Loading: <DetailsSkeleton />,
     Errored: <ErrorUI />,
@@ -40,7 +39,7 @@ export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
           id: tag.id,
           name: tag.name,
         })),
-      }
+      };
 
       return (
         <div>
@@ -72,12 +71,11 @@ export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
                 <dt className="text-sm/6 font-medium text-gray-900">Status</dt>
                 <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <span
-                    className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium 
-                                  ${
-                                    artwork.status === 'published'
-                                      ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-                                      : 'bg-yellow-50 text-yellow-800 ring-1 ring-inset ring-yellow-600/20'
-                                  }`}
+                    className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
+                      artwork.status === "published"
+                        ? "bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset"
+                        : "bg-yellow-50 text-yellow-800 ring-1 ring-yellow-600/20 ring-inset"
+                    }`}
                   >
                     {artwork.status}
                   </span>
@@ -111,8 +109,8 @@ export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
                     >
                       {new Date(artwork.createdAt).toDateString()}
                     </time>
-                  }{' '}
-                  at{' '}
+                  }{" "}
+                  at{" "}
                   {
                     <time
                       dateTime={artwork.createdAt}
@@ -126,7 +124,7 @@ export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm/6 font-medium text-gray-900">Tags</dt>
                 <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <span className="inline-flex gap-x-2 flex-wrap">
+                  <span className="inline-flex flex-wrap gap-x-2">
                     {artwork.tags.map((tag) => (
                       <span
                         key={tag.id}
@@ -146,7 +144,7 @@ export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
                     <Link
                       prefetch={true}
                       href={`/dashboard/artists/${artwork.owner.id}`}
-                      className="text-indigo-600 hover:text-indigo-900 font-medium"
+                      className="font-medium text-indigo-600 hover:text-indigo-900"
                     >
                       Details
                     </Link>
@@ -157,12 +155,9 @@ export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm/6 font-medium text-gray-900">Photos</dt>
                 <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
                     {artwork.photos.map((photo) => (
-                      <div
-                        key={photo.id}
-                        className="relative group"
-                      >
+                      <div key={photo.id} className="group relative">
                         <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
                           <Image
                             src={photo.url}
@@ -173,7 +168,7 @@ export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
                           />
                         </div>
                         {photo.isMain === 1 && (
-                          <span className="absolute top-2 left-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                          <span className="absolute top-2 left-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset">
                             Main Photo
                           </span>
                         )}
@@ -185,7 +180,7 @@ export default function ArtworkDetails({ id, token }: ArtworkDetailsProps) {
             </dl>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

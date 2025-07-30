@@ -1,24 +1,20 @@
-'use client'
-import { useShowArtistVerificationRequest } from '@/hooks/endpoints/admin'
-import { authHeader, matchQueryStatus } from '@/lib/utils'
-import DetailsSkeleton from './ui-skeletons/details-skeleton'
-import ErrorUI from './error-ui'
-import Link from 'next/link'
-import EditArtistVerificationRequestStatusModal from './edit-artist-verification-request-status-modal'
+"use client";
+import { useShowArtistVerificationRequest } from "@/hooks/endpoints/admin";
+import { authHeader, matchQueryStatus } from "@/lib/utils";
+import DetailsSkeleton from "./ui-skeletons/details-skeleton";
+import ErrorUI from "./error-ui";
+import Link from "next/link";
+import EditArtistVerificationRequestStatusModal from "./edit-artist-verification-request-status-modal";
+import { useSession } from "@/hooks/session";
+import { useParams } from "next/navigation";
 
-type ArtistVerificationRequestDetailsProps = {
-  id: string
-  token: string
-}
-
-export default function ArtistVerificationRequestDetails({
-  id,
-  token,
-}: ArtistVerificationRequestDetailsProps) {
+export default function ArtistVerificationRequestDetails() {
+  const { token } = useSession();
+  const { id } = useParams<{ id: string }>();
   const showArtistVerificationRequestQuery = useShowArtistVerificationRequest(
     id,
-    authHeader(token)
-  )
+    authHeader(token),
+  );
 
   return matchQueryStatus(showArtistVerificationRequestQuery, {
     Loading: <DetailsSkeleton />,
@@ -31,7 +27,7 @@ export default function ArtistVerificationRequestDetails({
         reason: data.data.reason,
         userId: data.data.user_id,
         submittedAt: data.data.created_at,
-      }
+      };
       return (
         <div>
           <div className="px-4 sm:px-0">
@@ -54,23 +50,20 @@ export default function ArtistVerificationRequestDetails({
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm/6 font-medium text-gray-900">Status</dt>
                 <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <span className="inline-flex items-center justify-between w-full gap-x-2">
+                  <span className="inline-flex w-full items-center justify-between gap-x-2">
                     <span
-                      className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium 
-                              ${
-                                rq.status === 'approved'
-                                  ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-                                  : rq.status === 'pending'
-                                    ? 'bg-yellow-50 text-yellow-800 ring-1 ring-inset ring-yellow-600/20'
-                                    : 'bg-red-50 text-red-800 ring-1 ring-inset ring-red-600/20'
-                              }`}
+                      className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
+                        rq.status === "approved"
+                          ? "bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset"
+                          : rq.status === "pending"
+                            ? "bg-yellow-50 text-yellow-800 ring-1 ring-yellow-600/20 ring-inset"
+                            : "bg-red-50 text-red-800 ring-1 ring-red-600/20 ring-inset"
+                      }`}
                     >
                       {rq.status}
                     </span>
-                    {rq.status === 'pending' && (
+                    {rq.status === "pending" && (
                       <EditArtistVerificationRequestStatusModal
-                        id={id}
-                        token={token}
                         status={rq.status}
                       />
                     )}
@@ -98,8 +91,8 @@ export default function ArtistVerificationRequestDetails({
                     >
                       {new Date(rq.submittedAt).toDateString()}
                     </time>
-                  }{' '}
-                  at{' '}
+                  }{" "}
+                  at{" "}
                   {
                     <time
                       dateTime={rq.submittedAt}
@@ -124,7 +117,7 @@ export default function ArtistVerificationRequestDetails({
             </dl>
           </div>
         </div>
-      )
+      );
     },
-  })
+  });
 }

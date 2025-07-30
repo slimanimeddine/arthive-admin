@@ -1,37 +1,40 @@
-'use client'
-import { useListArtworks } from '@/hooks/endpoints/admin'
-import { authHeader, fileUrl, matchQueryStatus } from '@/lib/utils'
-import Image from 'next/image'
-import ErrorUI from '../error-ui'
-import Pagination from '../pagination'
-import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import TableSkeleton from '../ui-skeletons/table-skeleton'
-import SortFilterArtworks from './sort-filter-artworks'
+"use client";
+import { useListArtworks } from "@/hooks/endpoints/admin";
+import { authHeader, fileUrl, matchQueryStatus } from "@/lib/utils";
+import Image from "next/image";
+import ErrorUI from "../error-ui";
+import Pagination from "../pagination";
+import Link from "next/link";
+import TableSkeleton from "../ui-skeletons/table-skeleton";
+import SortFilterArtworks from "./sort-filter-artworks";
+import { usePage } from "@/hooks/params/page";
+import { useArtworkSort } from "@/hooks/params/artwork-sort";
+import { useTag } from "@/hooks/params/tag";
+import { useStatus } from "@/hooks/params/status";
+import { useSession } from "@/hooks/session";
 
-export default function ArtworksTable({ token }: { token: string }) {
-  const searchParams = useSearchParams()
+export default function ArtworksTable() {
+  const { token } = useSession();
+  const { page } = usePage();
+  const { artworkSort } = useArtworkSort();
+  const { tag } = useTag();
+  const { status } = useStatus();
 
-  const page = searchParams.get('page')
-  const artworkSort = searchParams.get('artworkSort')
-  const tag = searchParams.get('tag')
-  const status = searchParams.get('status')
-
-  const queryParams: Record<string, string> = {
-    perPage: '10',
-    ...(tag && { 'filter[tag]': tag }),
-    ...(status && { 'filter[status]': status }),
+  const queryParams: Record<string, string | number> = {
+    perPage: 10,
+    ...(tag && { "filter[tag]": tag }),
+    ...(status && { "filter[status]": status }),
     ...(artworkSort && { sort: artworkSort }),
     ...(page && { page }),
-  }
+  };
 
-  const listArtworksQuery = useListArtworks(queryParams, authHeader(token))
+  const listArtworksQuery = useListArtworks(queryParams, authHeader(token));
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
+          <h1 className="text-base leading-6 font-semibold text-gray-900">
             Artworks
           </h1>
           <p className="mt-2 text-sm text-gray-700">
@@ -53,10 +56,10 @@ export default function ArtworksTable({ token }: { token: string }) {
                 photo: fileUrl(artwork.artwork_main_photo_path)!,
                 likes: artwork.artwork_likes_count,
                 comments: artwork.artwork_comments_count,
-              }))
+              }));
 
-              const meta = data.meta
-              const links = data.links
+              const meta = data.meta;
+              const links = data.links;
               return (
                 <>
                   <SortFilterArtworks />
@@ -96,7 +99,7 @@ export default function ArtworksTable({ token }: { token: string }) {
                           </th>
                           <th
                             scope="col"
-                            className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                            className="relative py-3.5 pr-4 pl-3 sm:pr-0"
                           >
                             <span className="sr-only">Actions</span>
                           </th>
@@ -106,22 +109,21 @@ export default function ArtworksTable({ token }: { token: string }) {
                       <tbody className="divide-y divide-gray-200">
                         {artworks.map((item) => (
                           <tr key={item.id}>
-                            <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500">
+                            <td className="px-1 py-4 text-sm whitespace-nowrap text-gray-500">
                               {item.title}
                             </td>
-                            <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500">
+                            <td className="px-1 py-4 text-sm whitespace-nowrap text-gray-500">
                               <span
-                                className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium 
-                              ${
-                                item.status === 'published'
-                                  ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20'
-                                  : 'bg-yellow-50 text-yellow-800 ring-1 ring-inset ring-yellow-600/20'
-                              }`}
+                                className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${
+                                  item.status === "published"
+                                    ? "bg-green-50 text-green-700 ring-1 ring-green-600/20 ring-inset"
+                                    : "bg-yellow-50 text-yellow-800 ring-1 ring-yellow-600/20 ring-inset"
+                                }`}
                               >
                                 {item.status}
                               </span>
                             </td>
-                            <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500">
+                            <td className="px-1 py-4 text-sm whitespace-nowrap text-gray-500">
                               <div className="h-16 w-16 flex-shrink-0">
                                 <Image
                                   className="h-16 w-16 object-cover"
@@ -132,13 +134,13 @@ export default function ArtworksTable({ token }: { token: string }) {
                                 />
                               </div>
                             </td>
-                            <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500">
+                            <td className="px-1 py-4 text-sm whitespace-nowrap text-gray-500">
                               {item.likes}
                             </td>
-                            <td className="whitespace-nowrap px-1 py-4 text-sm text-gray-500">
+                            <td className="px-1 py-4 text-sm whitespace-nowrap text-gray-500">
                               {item.comments}
                             </td>
-                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                            <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                               <Link
                                 prefetch={true}
                                 href={`/dashboard/artworks/${item.id}`}
@@ -153,19 +155,16 @@ export default function ArtworksTable({ token }: { token: string }) {
                     </table>
                     {meta.total > 10 && (
                       <div className="mt-2">
-                        <Pagination
-                          meta={meta}
-                          links={links}
-                        />
+                        <Pagination meta={meta} links={links} />
                       </div>
                     )}
                   </div>
                 </>
-              )
+              );
             },
           })}
         </div>
       </div>
     </div>
-  )
+  );
 }

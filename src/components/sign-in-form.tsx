@@ -1,22 +1,22 @@
-'use client'
-import { createSession } from '@/actions/session'
-import { SignInBody, useAdminSignIn } from '@/hooks/endpoints/authentication'
-import { onError } from '@/lib/utils'
-import { signInBody } from '@/schemas/authentication'
-import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+"use client";
+import { createSession } from "@/actions/session";
+import { type SignInBody, useSignIn } from "@/hooks/endpoints/authentication";
+import { onError } from "@/lib/utils";
+import { signInBody } from "@/schemas/authentication";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export default function SignInForm() {
   const { handleSubmit, register, formState, reset } = useForm<SignInBody>({
     resolver: zodResolver(signInBody),
-  })
+  });
 
-  const signInMutation = useAdminSignIn()
+  const signInMutation = useSignIn();
 
-  const router = useRouter()
+  const router = useRouter();
 
   function onSubmit(data: SignInBody) {
     signInMutation.mutate(
@@ -25,22 +25,19 @@ export default function SignInForm() {
       },
       {
         onError,
-        onSuccess: async (data) => {
-          reset()
-          await createSession(data.data.id, data.data.token)
-          toast.success('Admin signed in successfully!')
-          router.push('/dashboard')
+        onSuccess: ({ data }) => {
+          reset();
+          void createSession(data.id, data.token);
+          toast.success("User signed in successfully!");
+          router.push("/");
         },
-      }
-    )
+      },
+    );
   }
 
-  const isDisabled = formState.isSubmitting || signInMutation.isPending
+  const isDisabled = formState.isSubmitting || signInMutation.isPending;
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
         <label
           htmlFor="email"
@@ -52,8 +49,8 @@ export default function SignInForm() {
           <input
             id="email"
             type="email"
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            {...register('email')}
+            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            {...register("email")}
           />
           {formState.errors.email && (
             <p className="mt-2 text-sm text-red-600">
@@ -84,8 +81,8 @@ export default function SignInForm() {
           <input
             id="password"
             type="password"
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-            {...register('password')}
+            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            {...register("password")}
           />
           {formState.errors.password && (
             <p className="mt-2 text-sm text-red-600">
@@ -99,11 +96,11 @@ export default function SignInForm() {
         <button
           disabled={isDisabled}
           type="submit"
-          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Sign in
         </button>
       </div>
     </form>
-  )
+  );
 }

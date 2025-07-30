@@ -1,29 +1,18 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '8000',
-        pathname: '/storage/**',
-      },
-    ],
+    remotePatterns: [new URL("http://localhost:8000/storage/**")],
   },
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/dashboard',
+        source: "/",
+        destination: "/dashboard",
         permanent: true,
       },
-    ]
+    ];
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;
