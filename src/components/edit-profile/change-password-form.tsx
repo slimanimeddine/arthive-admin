@@ -4,7 +4,7 @@ import {
   useChangePassword,
 } from "@/hooks/endpoints/authentication";
 import { useSession } from "@/hooks/session";
-import { authHeader, classNames, onError } from "@/lib/utils";
+import { authHeader, classNames } from "@/lib/utils";
 import { changePasswordBody } from "@/schemas/authentication";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,15 +20,21 @@ export default function ChangePasswordForm() {
       resolver: zodResolver(changePasswordBody),
     });
 
-  const changePasswordMutation = useChangePassword(authHeader(token));
+  const { mutate, isPending } = useChangePassword(authHeader(token));
 
   function onSubmit(data: ChangePasswordBody) {
-    changePasswordMutation.mutate(
+    mutate(
       {
         data,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           toast.success("Password updated successfully!");
           void queryClient.invalidateQueries({
@@ -40,11 +46,7 @@ export default function ChangePasswordForm() {
     );
   }
 
-  const isDisabled =
-    formState.isSubmitting ||
-    changePasswordMutation.isPending ||
-    !token ||
-    !formState.isDirty;
+  const isDisabled = formState.isSubmitting || isPending || !formState.isDirty;
 
   return (
     <form
@@ -66,7 +68,7 @@ export default function ChangePasswordForm() {
             <div className="mt-2">
               <input
                 type="password"
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 {...register("current_password")}
               />
             </div>
@@ -87,7 +89,7 @@ export default function ChangePasswordForm() {
             <div className="mt-2">
               <input
                 type="password"
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 {...register("new_password")}
               />
             </div>
@@ -108,7 +110,7 @@ export default function ChangePasswordForm() {
             <div className="mt-2">
               <input
                 type="password"
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 {...register("new_password_confirmation")}
               />
             </div>
@@ -125,7 +127,7 @@ export default function ChangePasswordForm() {
           type="submit"
           disabled={isDisabled}
           className={classNames(
-            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
             isDisabled ? "cursor-not-allowed" : "hover:bg-indigo-500",
           )}
         >

@@ -1,4 +1,4 @@
-import ArtistsTable from "@/components/artists-table";
+import Artists from "@/components/artists-table";
 import { prefetchListUsersQuery } from "@/hooks/endpoints/admin";
 import {
   ARTIST_SORT_VALUES,
@@ -60,7 +60,7 @@ export default async function Page({ searchParams }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ArtistsTable />
+      <Artists />
     </HydrationBoundary>
   );
 }

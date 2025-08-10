@@ -1,4 +1,4 @@
-import ArtistVerificationRequestsTable from "@/components/artist-verification-requests-table";
+import ArtistVerificationRequests from "@/components/artist-verification-requests";
 import { prefetchListArtistVerificationRequests } from "@/hooks/endpoints/admin";
 import { ARTWORK_STATUS_VALUES } from "@/lib/constants";
 import { verifyAuth } from "@/lib/dal";
@@ -51,7 +51,7 @@ export default async function Page({ searchParams }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ArtistVerificationRequestsTable />
+      <ArtistVerificationRequests />
     </HydrationBoundary>
   );
 }

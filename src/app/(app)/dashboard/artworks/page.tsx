@@ -1,4 +1,4 @@
-import ArtworksTable from "@/components/artworks-table";
+import Artworks from "@/components/artworks-table";
 import { prefetchListArtworksQuery } from "@/hooks/endpoints/admin";
 import {
   ARTWORK_SORT_VALUES,
@@ -57,7 +57,7 @@ export default async function Page({ searchParams }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ArtworksTable />
+      <Artworks />
     </HydrationBoundary>
   );
 }

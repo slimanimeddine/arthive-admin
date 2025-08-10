@@ -3,7 +3,7 @@ import {
   type UpdateAuthenticatedUserBody,
   useUpdateAuthenticatedUser,
 } from "@/hooks/endpoints/users";
-import { authHeader, classNames, getDirtyValues, onError } from "@/lib/utils";
+import { authHeader, classNames, getDirtyValues } from "@/lib/utils";
 import { updateAuthenticatedUserBody } from "@/schemas/users";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -45,18 +45,22 @@ export default function PersonalInformationForm({
       },
     });
 
-  const updateAuthenticatedUserMutation = useUpdateAuthenticatedUser(
-    authHeader(token),
-  );
+  const { mutate, isPending } = useUpdateAuthenticatedUser(authHeader(token));
 
   function onSubmit(data: UpdateAuthenticatedUserBody) {
     const dirtyValues = getDirtyValues(formState.dirtyFields, data);
-    updateAuthenticatedUserMutation.mutate(
+    mutate(
       {
         data: dirtyValues,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           toast.success("Personal Information updated successfully!");
           void queryClient.invalidateQueries({
@@ -67,11 +71,7 @@ export default function PersonalInformationForm({
     );
   }
 
-  const isDisabled =
-    formState.isSubmitting ||
-    updateAuthenticatedUserMutation.isPending ||
-    !token ||
-    !formState.isDirty;
+  const isDisabled = formState.isSubmitting || isPending || !formState.isDirty;
 
   return (
     <form
@@ -124,7 +124,7 @@ export default function PersonalInformationForm({
             <div className="mt-2">
               <input
                 type="text"
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 {...register("first_name")}
               />
             </div>
@@ -145,7 +145,7 @@ export default function PersonalInformationForm({
             <div className="mt-2">
               <input
                 type="text"
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 {...register("last_name")}
               />
             </div>
@@ -165,7 +165,7 @@ export default function PersonalInformationForm({
             </label>
             <div className="mt-2">
               <input
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 {...register("email")}
               />
             </div>
@@ -209,7 +209,7 @@ export default function PersonalInformationForm({
           type="submit"
           disabled={isDisabled}
           className={classNames(
-            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+            "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
             isDisabled ? "cursor-not-allowed" : "hover:bg-indigo-500",
           )}
         >

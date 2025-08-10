@@ -15,7 +15,7 @@ import {
 import { reviewArtistVerificationRequestBody } from "@/schemas/artist-verification-requests";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { authHeader, onError } from "@/lib/utils";
+import { authHeader } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@/hooks/session";
@@ -39,17 +39,24 @@ export default function StatusModal({ status }: StatusModalProps) {
       },
     });
 
-  const reviewArtistVerificationRequestMutation =
-    useReviewArtistVerificationRequest(authHeader(token));
+  const { mutate, isPending } = useReviewArtistVerificationRequest(
+    authHeader(token),
+  );
 
   function onSubmit(data: ReviewArtistVerificationRequestBody) {
-    reviewArtistVerificationRequestMutation.mutate(
+    mutate(
       {
         artistVerificationRequestId: id,
         data,
       },
       {
-        onError,
+        onError: (error) => {
+          if (error.isAxiosError) {
+            toast.error(error.response?.data.message ?? "Something went wrong");
+          } else {
+            toast.error(error.message);
+          }
+        },
         onSuccess: () => {
           toast.success("Personal Information updated successfully!");
           void queryClient.invalidateQueries({
@@ -63,11 +70,7 @@ export default function StatusModal({ status }: StatusModalProps) {
     );
   }
 
-  const isDisabled =
-    formState.isSubmitting ||
-    reviewArtistVerificationRequestMutation.isPending ||
-    !token ||
-    !formState.isDirty;
+  const isDisabled = formState.isSubmitting || isPending || !formState.isDirty;
 
   return (
     <>
