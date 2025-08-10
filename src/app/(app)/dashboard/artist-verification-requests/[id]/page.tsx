@@ -1,8 +1,9 @@
 import ArtistVerificationRequestDetails from "@/components/artist-verification-request-details";
+import InvalidParams from "@/components/invalid-params";
 import { prefetchShowArtistVerificationRequestQuery } from "@/hooks/endpoints/admin";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
-import { authHeader, parseData } from "@/lib/utils";
+import { authHeader, parseParams } from "@/lib/utils";
 import {
   dehydrate,
   HydrationBoundary,
@@ -24,10 +25,19 @@ const paramsSchema = z.object({
 });
 
 export default async function Page({ params }: Props) {
-  const { id } = parseData(await params, paramsSchema);
-
   const { token } = await verifyAuth();
   const queryClient = new QueryClient();
+
+  const { data, success, error } = parseParams(await params, paramsSchema);
+
+  if (!success) {
+    const errors = Object.values(z.flattenError(error).fieldErrors).map((err) =>
+      err.join(", "),
+    );
+    return <InvalidParams errors={errors} />;
+  }
+
+  const { id } = data;
 
   await prefetchShowArtistVerificationRequestQuery(
     queryClient,

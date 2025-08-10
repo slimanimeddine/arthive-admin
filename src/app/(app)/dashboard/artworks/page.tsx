@@ -1,4 +1,5 @@
 import Artworks from "@/components/artworks-table";
+import InvalidParams from "@/components/invalid-params";
 import { prefetchListArtworksQuery } from "@/hooks/endpoints/admin";
 import {
   ARTWORK_SORT_VALUES,
@@ -7,7 +8,7 @@ import {
 } from "@/lib/constants";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
-import { authHeader, parseData } from "@/lib/utils";
+import { authHeader, parseParams } from "@/lib/utils";
 import {
   dehydrate,
   HydrationBoundary,
@@ -40,10 +41,19 @@ export default async function Page({ searchParams }: Props) {
   const { token } = await verifyAuth();
   const queryClient = new QueryClient();
 
-  const { tag, status, artworkSort, page } = parseData(
+  const { data, success, error } = parseParams(
     await searchParams,
     searchParamsSchema,
   );
+
+  if (!success) {
+    const errors = Object.values(z.flattenError(error).fieldErrors).map((err) =>
+      err.join(", "),
+    );
+    return <InvalidParams errors={errors} />;
+  }
+
+  const { tag, status, artworkSort, page } = data;
 
   const queryParams: Record<string, number | string> = {
     perPage: 10,

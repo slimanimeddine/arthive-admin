@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type z from "zod";
 
@@ -130,15 +129,6 @@ export function addOrdinalSuffix(num: number): string {
   }
 }
 
-export function parseData<T extends z.ZodType>(
-  data: unknown,
-  schema: T,
-): z.output<T> {
-  const parsed = schema.safeParse(data);
-
-  if (!parsed.success) {
-    throw new Error("Invalid URL or query parameters");
-  }
-
-  return parsed.data;
+export function parseParams<T extends z.ZodType>(data: unknown, schema: T) {
+  return schema.safeParse(data);
 }

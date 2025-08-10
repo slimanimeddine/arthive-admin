@@ -1,8 +1,9 @@
 import ArtworkDetails from "@/components/artwork-details";
+import InvalidParams from "@/components/invalid-params";
 import { prefetchShowArtworkQuery } from "@/hooks/endpoints/admin";
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
-import { authHeader, parseData } from "@/lib/utils";
+import { authHeader, parseParams } from "@/lib/utils";
 import {
   dehydrate,
   HydrationBoundary,
@@ -24,7 +25,16 @@ const paramsSchema = z.object({
 });
 
 export default async function Page({ params }: Props) {
-  const { id } = parseData(await params, paramsSchema);
+  const { data, success, error } = parseParams(await params, paramsSchema);
+
+  if (!success) {
+    const errors = Object.values(z.flattenError(error).fieldErrors).map((err) =>
+      err.join(", "),
+    );
+    return <InvalidParams errors={errors} />;
+  }
+
+  const { id } = data;
 
   const { token } = await verifyAuth();
   const queryClient = new QueryClient();
