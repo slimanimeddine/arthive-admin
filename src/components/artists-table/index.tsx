@@ -1,5 +1,3 @@
-"use client";
-
 import ArtistsTable from "./table";
 
 export default function Artists() {

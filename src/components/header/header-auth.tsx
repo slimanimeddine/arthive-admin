@@ -10,7 +10,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "../logo";
 import ProfileDropdown from "./profile-dropdown";
-import SearchComponent from "./search-input";
 import NotificationIcon from "./notification-icon";
 import ProfileImage from "./profile-image";
 import ProfileInfo from "./profile-info";
@@ -53,9 +52,6 @@ export default function HeaderAuth() {
                 </Link>
               ))}
             </div>
-          </div>
-          <div className="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
-            <SearchComponent />
           </div>
           <div className="flex items-center lg:hidden">
             {/* Mobile menu button */}

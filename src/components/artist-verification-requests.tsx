@@ -1,5 +1,3 @@
-"use client";
-
 import ArtistVerificationRequestsTable from "./artist-verification-requests-table";
 
 export default function ArtistVerificationRequests() {

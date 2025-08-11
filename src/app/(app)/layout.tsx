@@ -2,7 +2,7 @@ import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { prefetchCheckIfUnreadNotificationsExist } from "@/hooks/endpoints/notifications";
 import { prefetchShowAuthenticatedUser } from "@/hooks/endpoints/users";
-import { getAuth } from "@/lib/dal";
+import { verifyAuth } from "@/lib/dal";
 import { authHeader } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
 
@@ -11,8 +11,8 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { token } = await getAuth();
-  const authConfig = authHeader(token!);
+  const { token } = await verifyAuth();
+  const authConfig = authHeader(token);
 
   const queryClient = new QueryClient();
 

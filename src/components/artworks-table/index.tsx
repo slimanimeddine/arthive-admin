@@ -1,4 +1,3 @@
-"use client";
 import ArtworksTable from "./table";
 
 export default function Artworks() {

@@ -30,7 +30,13 @@ const sortOptions: SortOption[] = [
   { id: 4, value: "trending", label: "Trending" },
 ];
 
-const statusOptions = [
+type StatusOption = {
+  id: number;
+  value: "draft" | "published";
+  label: "Draft" | "Published";
+};
+
+const statusOptions: StatusOption[] = [
   { id: 1, value: "draft", label: "Draft" },
   { id: 2, value: "published", label: "Published" },
 ];
