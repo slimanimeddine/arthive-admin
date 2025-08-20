@@ -16,13 +16,13 @@ export const metadata: Metadata = {
   ...seo("Artist verification request", "Manage artist verification request."),
 };
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
-
 const paramsSchema = z.object({
   id: z.uuid(),
 });
+
+type Props = {
+  params: Promise<z.infer<typeof paramsSchema>>;
+};
 
 export default async function Page({ params }: Props) {
   const { token } = await verifyAuth();

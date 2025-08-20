@@ -21,21 +21,16 @@ export const metadata: Metadata = {
   ...seo("Artworks", "Manage artworks."),
 };
 
-type Props = {
-  searchParams: Promise<{
-    tag?: string;
-    status?: string;
-    artworkSort?: string;
-    page: string;
-  }>;
-};
-
 const searchParamsSchema = z.object({
   tag: z.enum(TAGS).optional(),
   status: z.enum(ARTWORK_STATUS_VALUES).optional(),
   artworkSort: z.enum(ARTWORK_SORT_VALUES).optional(),
   page: z.int().default(1),
 });
+
+type Props = {
+  searchParams: Promise<z.infer<typeof searchParamsSchema>>;
+};
 
 export default async function Page({ searchParams }: Props) {
   const { token } = await verifyAuth();

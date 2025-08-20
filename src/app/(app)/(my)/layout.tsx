@@ -27,11 +27,11 @@ const navigation = [
   },
 ];
 
-export default function Layout({
-  children,
-}: Readonly<{
+type Props = Readonly<{
   children: React.ReactNode;
-}>) {
+}>;
+
+export default function Layout({ children }: Props) {
   return (
     <SidebarNavigationLayout navigation={navigation}>
       {children}

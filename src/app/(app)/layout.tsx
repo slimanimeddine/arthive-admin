@@ -6,11 +6,11 @@ import { verifyAuth } from "@/lib/dal";
 import { authHeader } from "@/lib/utils";
 import { QueryClient } from "@tanstack/react-query";
 
-export default async function Layout({
-  children,
-}: Readonly<{
+type Props = Readonly<{
   children: React.ReactNode;
-}>) {
+}>;
+
+export default async function Layout({ children }: Props) {
   const { token } = await verifyAuth();
   const authConfig = authHeader(token);
 

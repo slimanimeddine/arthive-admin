@@ -20,17 +20,14 @@ export const metadata: Metadata = {
   ),
 };
 
-type Props = {
-  searchParams: Promise<{
-    status?: string;
-    page: number;
-  }>;
-};
-
 const searchParamsSchema = z.object({
   status: z.enum(ARTWORK_STATUS_VALUES).optional(),
   page: z.int().default(1),
 });
+
+type Props = {
+  searchParams: Promise<z.infer<typeof searchParamsSchema>>;
+};
 
 export default async function Page({ searchParams }: Props) {
   const { token } = await verifyAuth();
