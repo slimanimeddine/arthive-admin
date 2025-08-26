@@ -1,6 +1,7 @@
 "use client";
 
 import { classNames } from "@/lib/utils";
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -38,7 +39,7 @@ export default function SidebarNavigationLayout({
             {navigation.map((item) => (
               <li key={item.name}>
                 <Link
-                  href={item.href}
+                  href={item.href as Route}
                   className={classNames(
                     item.href === pathname
                       ? "bg-gray-50 text-indigo-600"
