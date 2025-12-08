@@ -20,7 +20,7 @@ export default function ProfileInfo() {
   }
 
   if (!data) {
-    return <></>;
+    return <div></div>;
   }
 
   const user = data.data;

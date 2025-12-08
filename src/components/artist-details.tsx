@@ -1,12 +1,12 @@
 "use client";
-import { useShowArtist } from "@/hooks/endpoints/admin";
-import { authHeader, fileUrl } from "@/lib/utils";
-import DetailsSkeleton from "./ui-skeletons/details-skeleton";
-import ErrorUI from "./error-ui";
 import Image from "next/image";
-import AvatarPlaceholder from "./avatar-placeholder";
 import { notFound, useParams, useRouter } from "next/navigation";
+import { useShowArtist } from "@/hooks/endpoints/admin";
 import { useSession } from "@/hooks/session";
+import { authHeader, fileUrl } from "@/lib/utils";
+import AvatarPlaceholder from "./avatar-placeholder";
+import ErrorUI from "./error-ui";
+import DetailsSkeleton from "./ui-skeletons/details-skeleton";
 
 export default function ArtistDetails() {
   const { token } = useSession();
@@ -30,7 +30,7 @@ export default function ArtistDetails() {
   }
 
   if (!data) {
-    return <></>;
+    return <div></div>;
   }
 
   const artist = {
@@ -48,7 +48,7 @@ export default function ArtistDetails() {
       title: artwork.title,
       likesCount: artwork.artwork_likes_count,
       commentsCount: artwork.artwork_comments_count,
-      mainPhoto: fileUrl(artwork.artwork_main_photo_path)!,
+      mainPhoto: fileUrl(artwork.artwork_main_photo_path) as string,
     })),
   };
   return (
@@ -150,7 +150,8 @@ export default function ArtistDetails() {
             </div>
             <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
               {artist.artworks.map((artwork) => (
-                <div
+                <button
+                  type="button"
                   onClick={() =>
                     router.push(`/dashboard/artworks/${artwork.id}`)
                   }
@@ -182,7 +183,7 @@ export default function ArtistDetails() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>

@@ -1,12 +1,12 @@
 "use client";
 
-import SidebarNavigationLayout from "@/components/sidebar-navigation-layout";
 import {
   BriefcaseIcon,
   CheckBadgeIcon,
   TableCellsIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
+import SidebarNavigationLayout from "@/components/sidebar-navigation-layout";
 
 const navigation = [
   {

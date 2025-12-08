@@ -1,9 +1,10 @@
 "use client";
-import { useMarkNotificationRead } from "@/hooks/mark-notification-as-read";
-import { classNames } from "@/lib/utils";
 import { QuestionMarkCircleIcon } from "@heroicons/react/20/solid";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useMarkNotificationRead } from "@/hooks/mark-notification-as-read";
+import { classNames } from "@/lib/utils";
+
 dayjs.extend(relativeTime);
 
 type ArtistVerificationRequestNotificationProps = {
@@ -27,7 +28,8 @@ export default function ArtistVerificationRequestNotification({
   const { markAsRead } = useMarkNotificationRead(notificationId, readAt);
 
   return (
-    <div
+    <button
+      type="button"
       onClick={markAsRead}
       className={classNames(
         "relative p-2",
@@ -56,6 +58,6 @@ export default function ArtistVerificationRequestNotification({
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 }

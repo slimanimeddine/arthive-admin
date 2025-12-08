@@ -1,10 +1,10 @@
+import { QueryClient } from "@tanstack/react-query";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { prefetchCheckIfUnreadNotificationsExist } from "@/hooks/endpoints/notifications";
 import { prefetchShowAuthenticatedUser } from "@/hooks/endpoints/users";
 import { verifyAuth } from "@/lib/dal";
 import { authHeader } from "@/lib/utils";
-import { QueryClient } from "@tanstack/react-query";
 
 type Props = Readonly<{
   children: React.ReactNode;

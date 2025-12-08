@@ -1,4 +1,4 @@
-import { type NotificationItem } from "@/types/models/notification";
+import type { NotificationItem } from "@/types/models/notification";
 import ArtistVerificationRequestNotification from "./artist-verification-request-notification";
 
 type NotificationProps = {
@@ -20,5 +20,5 @@ export default function Notification({ notification }: NotificationProps) {
     );
   }
 
-  return <></>;
+  return <div></div>;
 }

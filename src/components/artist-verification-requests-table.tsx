@@ -1,13 +1,13 @@
 "use client";
 
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useListArtistVerificationRequests } from "@/hooks/endpoints/admin";
+import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
 import ErrorUI from "./error-ui";
 import Pagination from "./pagination";
-import { useSearchParams } from "next/navigation";
 import TableSkeleton from "./ui-skeletons/table-skeleton";
-import Link from "next/link";
-import { useSession } from "@/hooks/session";
 
 export default function ArtistVerificationRequestsTable() {
   const { token } = useSession();
@@ -36,7 +36,7 @@ export default function ArtistVerificationRequestsTable() {
   }
 
   if (!data || data.data.length === 0) {
-    return <></>;
+    return <div></div>;
   }
 
   const artistVerificationRequests = data.data.map((rq) => ({

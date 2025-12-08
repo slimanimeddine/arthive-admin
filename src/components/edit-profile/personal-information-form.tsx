@@ -1,16 +1,16 @@
 "use client";
-import {
-  type UpdateAuthenticatedUserBody,
-  useUpdateAuthenticatedUser,
-} from "@/hooks/endpoints/users";
-import { authHeader, classNames, getDirtyValues } from "@/lib/utils";
-import { updateAuthenticatedUserBody } from "@/schemas/users";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import SelectCountry from "./select-country";
+import {
+  type UpdateAuthenticatedUserBody,
+  useUpdateAuthenticatedUser,
+} from "@/hooks/endpoints/users";
 import { useSession } from "@/hooks/session";
+import { authHeader, classNames, getDirtyValues } from "@/lib/utils";
+import { updateAuthenticatedUserBody } from "@/schemas/users";
+import SelectCountry from "./select-country";
 
 type PersonalInformationFormProps = {
   username: string;

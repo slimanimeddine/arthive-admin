@@ -1,4 +1,8 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import {
   type ChangePasswordBody,
   useChangePassword,
@@ -6,10 +10,6 @@ import {
 import { useSession } from "@/hooks/session";
 import { authHeader, classNames } from "@/lib/utils";
 import { changePasswordBody } from "@/schemas/authentication";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 export default function ChangePasswordForm() {
   const { token } = useSession();

@@ -1,4 +1,8 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { deleteSession } from "@/actions/session";
 import {
   type DeleteUserBody,
@@ -7,10 +11,6 @@ import {
 import { useSession } from "@/hooks/session";
 import { authHeader } from "@/lib/utils";
 import { deleteUserBody } from "@/schemas/authentication";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 export default function DeleteAccount() {
   const { token } = useSession();

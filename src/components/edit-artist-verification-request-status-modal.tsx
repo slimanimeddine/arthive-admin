@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -8,18 +7,19 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import {
   type ReviewArtistVerificationRequestBody,
   useReviewArtistVerificationRequest,
 } from "@/hooks/endpoints/admin";
-import { reviewArtistVerificationRequestBody } from "@/schemas/artist-verification-requests";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { authHeader } from "@/lib/utils";
-import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "@/hooks/session";
-import { useParams } from "next/navigation";
+import { authHeader } from "@/lib/utils";
+import { reviewArtistVerificationRequestBody } from "@/schemas/artist-verification-requests";
 
 type StatusModalProps = {
   status: ReviewArtistVerificationRequestBody["status"];
@@ -85,14 +85,14 @@ export default function StatusModal({ status }: StatusModalProps) {
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <DialogBackdrop
           transition
-          className="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[enter]:ease-out data-[leave]:duration-200 data-[leave]:ease-in"
+          className="bg-opacity-75 fixed inset-0 bg-gray-500 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
         />
 
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <DialogPanel
               transition
-              className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[enter]:ease-out data-[leave]:duration-200 data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
+              className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-closed:sm:translate-y-0 data-closed:sm:scale-95"
             >
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div>

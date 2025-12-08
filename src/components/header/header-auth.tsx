@@ -1,19 +1,19 @@
 "use client";
-import { classNames } from "@/lib/utils";
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { classNames } from "@/lib/utils";
 import Logo from "../logo";
-import ProfileDropdown from "./profile-dropdown";
 import NotificationIcon from "./notification-icon";
+import ProfileDropdown from "./profile-dropdown";
 import ProfileImage from "./profile-image";
 import ProfileInfo from "./profile-info";
-import type { Route } from "next";
 
 const navigation = [
   { name: "Artists", href: "/artists" },
@@ -34,7 +34,7 @@ export default function HeaderAuth() {
       <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
         <div className="flex h-16 justify-between">
           <div className="flex px-2 lg:px-0">
-            <Link href="/" className="flex flex-shrink-0 items-center">
+            <Link href="/" className="flex shrink-0 items-center">
               <Logo />
             </Link>
             <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
@@ -61,18 +61,18 @@ export default function HeaderAuth() {
               <span className="sr-only">Open main menu</span>
               <Bars3Icon
                 aria-hidden="true"
-                className="block h-6 w-6 group-data-[open]:hidden"
+                className="block h-6 w-6 group-data-open:hidden"
               />
               <XMarkIcon
                 aria-hidden="true"
-                className="hidden h-6 w-6 group-data-[open]:block"
+                className="hidden h-6 w-6 group-data-open:block"
               />
             </DisclosureButton>
           </div>
           <div className="hidden lg:ml-4 lg:flex lg:items-center">
             <Link
               href="/notifications"
-              className="relative flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+              className="relative shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
@@ -108,7 +108,7 @@ export default function HeaderAuth() {
 
             <Link
               href="/notifications"
-              className="relative ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+              className="relative ml-auto shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>

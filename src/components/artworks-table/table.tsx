@@ -1,17 +1,17 @@
 "use client";
-import { useListArtworks } from "@/hooks/endpoints/admin";
-import { authHeader, fileUrl } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
+import { useListArtworks } from "@/hooks/endpoints/admin";
+import { useArtworkSort } from "@/hooks/params/artwork-sort";
+import { usePage } from "@/hooks/params/page";
+import { useStatus } from "@/hooks/params/status";
+import { useTag } from "@/hooks/params/tag";
+import { useSession } from "@/hooks/session";
+import { authHeader, fileUrl } from "@/lib/utils";
 import ErrorUI from "../error-ui";
 import Pagination from "../pagination";
-import Link from "next/link";
 import TableSkeleton from "../ui-skeletons/table-skeleton";
 import SortFilterArtworks from "./sort-filter-artworks";
-import { usePage } from "@/hooks/params/page";
-import { useArtworkSort } from "@/hooks/params/artwork-sort";
-import { useTag } from "@/hooks/params/tag";
-import { useStatus } from "@/hooks/params/status";
-import { useSession } from "@/hooks/session";
 
 export default function ArtworksTable() {
   const { token } = useSession();
@@ -42,14 +42,14 @@ export default function ArtworksTable() {
   }
 
   if (!data || data.data.length === 0) {
-    return <></>;
+    return <div></div>;
   }
 
   const artworks = data.data.map((artwork) => ({
     id: artwork.id,
     title: artwork.title,
     status: artwork.status,
-    photo: fileUrl(artwork.artwork_main_photo_path)!,
+    photo: fileUrl(artwork.artwork_main_photo_path) as string,
     likes: artwork.artwork_likes_count,
     comments: artwork.artwork_comments_count,
   }));
@@ -117,7 +117,7 @@ export default function ArtworksTable() {
                   </span>
                 </td>
                 <td className="px-1 py-4 text-sm whitespace-nowrap text-gray-500">
-                  <div className="h-16 w-16 flex-shrink-0">
+                  <div className="h-16 w-16 shrink-0">
                     <Image
                       className="h-16 w-16 object-cover"
                       src={item.photo}

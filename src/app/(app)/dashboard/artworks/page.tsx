@@ -1,3 +1,10 @@
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import type { Metadata } from "next";
+import z from "zod";
 import Artworks from "@/components/artworks-table";
 import InvalidParams from "@/components/invalid-params";
 import { prefetchListArtworksQuery } from "@/hooks/endpoints/admin";
@@ -9,13 +16,6 @@ import {
 import { verifyAuth } from "@/lib/dal";
 import seo from "@/lib/seo";
 import { authHeader, parseParams } from "@/lib/utils";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
-import { type Metadata } from "next";
-import z from "zod";
 
 export const metadata: Metadata = {
   ...seo("Artworks", "Manage artworks."),

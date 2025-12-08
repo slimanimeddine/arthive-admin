@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -13,6 +12,7 @@ import type {
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export type ListArtworks200 = PaginatedApiResponse<ArtworkModel>;
 export type ListArtworks401 = UnauthenticatedApiResponse;
@@ -86,20 +86,20 @@ export type ShowArtistVerificationRequest401 = UnauthenticatedApiResponse;
 export type ShowArtistVerificationRequest403 = UnauthorizedApiResponse;
 export type ShowArtistVerificationRequest404 = NotFoundApiResponse;
 
-import { customInstance } from "@/lib/axios";
+import type { z } from "zod";
 import type { BodyType, ErrorType } from "@/lib/axios";
-import {
-  type ApiResource,
-  type NotFoundApiResponse,
-  type PaginatedApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import { customInstance } from "@/lib/axios";
+import type { reviewArtistVerificationRequestBody } from "@/schemas/artist-verification-requests";
+import type {
+  ApiResource,
+  NotFoundApiResponse,
+  PaginatedApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type Artwork, type ArtworkModel } from "@/types/models/artwork";
-import { type User, type UserModel } from "@/types/models/user";
-import { type ArtistVerificationRequestModel } from "@/types/models/artist-verification-request";
-import { type z } from "zod";
-import { type reviewArtistVerificationRequestBody } from "@/schemas/artist-verification-requests";
+import type { ArtistVerificationRequestModel } from "@/types/models/artist-verification-request";
+import type { Artwork, ArtworkModel } from "@/types/models/artwork";
+import type { User, UserModel } from "@/types/models/user";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

@@ -1,18 +1,18 @@
 "use client";
-import { useListUsers } from "@/hooks/endpoints/admin";
-import { authHeader, fileUrl } from "@/lib/utils";
 import Image from "next/image";
-import ErrorUI from "../error-ui";
-import Pagination from "../pagination";
-import TableSkeleton from "../ui-skeletons/table-skeleton";
-import AvatarPlaceholder from "../avatar-placeholder";
 import Link from "next/link";
-import SortFilterArtists from "./sort-filter-artists";
+import { useListUsers } from "@/hooks/endpoints/admin";
 import { useArtistSort } from "@/hooks/params/artist-sort";
 import { usePage } from "@/hooks/params/page";
 import { useTag } from "@/hooks/params/tag";
 import { useVerified } from "@/hooks/params/verified";
 import { useSession } from "@/hooks/session";
+import { authHeader, fileUrl } from "@/lib/utils";
+import AvatarPlaceholder from "../avatar-placeholder";
+import ErrorUI from "../error-ui";
+import Pagination from "../pagination";
+import TableSkeleton from "../ui-skeletons/table-skeleton";
+import SortFilterArtists from "./sort-filter-artists";
 
 export default function ArtistsTable() {
   const { token } = useSession();
@@ -43,7 +43,7 @@ export default function ArtistsTable() {
   }
 
   if (!data || data.data.length === 0) {
-    return <></>;
+    return <div></div>;
   }
 
   const artists = data.data.map((artist) => ({
@@ -99,7 +99,7 @@ export default function ArtistsTable() {
               <tr key={artist.id}>
                 <td className="py-5 pr-3 pl-4 text-sm whitespace-nowrap sm:pl-0">
                   <div className="flex items-center">
-                    <div className="h-11 w-11 flex-shrink-0">
+                    <div className="h-11 w-11 shrink-0">
                       {artist.photo ? (
                         <Image
                           alt=""

@@ -1,13 +1,13 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+import { notFound, useParams } from "next/navigation";
 import { useShowArtwork } from "@/hooks/endpoints/admin";
+import { useSession } from "@/hooks/session";
 import { authHeader, fileUrl } from "@/lib/utils";
 import ErrorUI from "./error-ui";
-import Link from "next/link";
-import Image from "next/image";
 import DetailsSkeleton from "./ui-skeletons/details-skeleton";
-import { useSession } from "@/hooks/session";
-import { notFound, useParams } from "next/navigation";
 
 export default function ArtworkDetails() {
   const { token } = useSession();
@@ -29,7 +29,7 @@ export default function ArtworkDetails() {
   }
 
   if (!data) {
-    return <></>;
+    return <div></div>;
   }
 
   const artwork = {
@@ -47,7 +47,7 @@ export default function ArtworkDetails() {
     photos: data.data.artwork_photos.map((photo) => ({
       id: photo.id,
       isMain: photo.is_main,
-      url: fileUrl(photo.path)!,
+      url: fileUrl(photo.path) as string,
     })),
     tags: data.data.tags.map((tag) => ({
       id: tag.id,

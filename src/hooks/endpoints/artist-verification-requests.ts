@@ -27,14 +27,14 @@ export type SubmitArtistVerificationRequest403 = UnauthorizedApiResponse;
 
 import type { ErrorType } from "@/lib/axios";
 import { customInstance } from "@/lib/axios";
-import {
-  type ApiResource,
-  type ErrorApiResponse,
-  type PaginatedApiResponse,
-  type UnauthenticatedApiResponse,
-  type UnauthorizedApiResponse,
+import type {
+  ApiResource,
+  ErrorApiResponse,
+  PaginatedApiResponse,
+  UnauthenticatedApiResponse,
+  UnauthorizedApiResponse,
 } from "@/types/api-responses";
-import { type ArtistVerificationRequestModel } from "@/types/models/artist-verification-request";
+import type { ArtistVerificationRequestModel } from "@/types/models/artist-verification-request";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 

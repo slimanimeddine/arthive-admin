@@ -1,12 +1,12 @@
 "use client";
-import { useShowArtistVerificationRequest } from "@/hooks/endpoints/admin";
-import { authHeader } from "@/lib/utils";
-import DetailsSkeleton from "./ui-skeletons/details-skeleton";
-import ErrorUI from "./error-ui";
 import Link from "next/link";
-import EditArtistVerificationRequestStatusModal from "./edit-artist-verification-request-status-modal";
-import { useSession } from "@/hooks/session";
 import { notFound, useParams } from "next/navigation";
+import { useShowArtistVerificationRequest } from "@/hooks/endpoints/admin";
+import { useSession } from "@/hooks/session";
+import { authHeader } from "@/lib/utils";
+import EditArtistVerificationRequestStatusModal from "./edit-artist-verification-request-status-modal";
+import ErrorUI from "./error-ui";
+import DetailsSkeleton from "./ui-skeletons/details-skeleton";
 
 export default function ArtistVerificationRequestDetails() {
   const { token } = useSession();
@@ -28,7 +28,7 @@ export default function ArtistVerificationRequestDetails() {
   }
 
   if (!data) {
-    return <></>;
+    return <div></div>;
   }
 
   const rq = {
