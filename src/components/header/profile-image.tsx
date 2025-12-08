@@ -28,7 +28,7 @@ export default function ProfileImage() {
   if (data.data.photo) {
     return (
       <div className="shrink-0">
-        <Image
+        <Image unoptimized
           alt=""
           src={fileUrl(data.data.photo) as string}
           className="h-10 w-10 rounded-full"

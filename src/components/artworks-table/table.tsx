@@ -118,7 +118,7 @@ export default function ArtworksTable() {
                 </td>
                 <td className="px-1 py-4 text-sm whitespace-nowrap text-gray-500">
                   <div className="h-16 w-16 shrink-0">
-                    <Image
+                    <Image unoptimized
                       className="h-16 w-16 object-cover"
                       src={item.photo}
                       alt=""
