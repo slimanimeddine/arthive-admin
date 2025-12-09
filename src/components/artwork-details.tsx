@@ -169,7 +169,8 @@ export default function ArtworkDetails() {
                 {artwork.photos.map((photo) => (
                   <div key={photo.id} className="group relative">
                     <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-                      <Image unoptimized
+                      <Image
+                        unoptimized
                         src={photo.url}
                         alt={`Artwork photo ${photo.id}`}
                         width={400}

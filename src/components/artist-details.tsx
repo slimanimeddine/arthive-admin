@@ -67,7 +67,8 @@ export default function ArtistDetails() {
             <dt className="text-sm/6 font-medium text-gray-900">Photo</dt>
             <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
               {artist.photo ? (
-                <Image unoptimized
+                <Image
+                  unoptimized
                   className="h-20 w-20 rounded-lg"
                   src={artist.photo}
                   alt="Artist Photo"
@@ -159,7 +160,8 @@ export default function ArtistDetails() {
                   className="group relative hover:underline"
                 >
                   <div className="aspect-h-1 aspect-w-1 lg:aspect-none w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80">
-                    <Image unoptimized
+                    <Image
+                      unoptimized
                       src={artwork.mainPhoto}
                       alt={artwork.title}
                       width={400}

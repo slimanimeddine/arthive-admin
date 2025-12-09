@@ -101,7 +101,8 @@ export default function ArtistsTable() {
                   <div className="flex items-center">
                     <div className="h-11 w-11 shrink-0">
                       {artist.photo ? (
-                        <Image unoptimized
+                        <Image
+                          unoptimized
                           alt=""
                           src={artist.photo}
                           className="h-11 w-11 rounded-full"
